@@ -1,12 +1,18 @@
-# Kitchen API v2
+# Kitchen API
 
 Read-only inventory API for one shop's kitchen, run by the delivery platform.
 
 v1 (`/categories`, `/ingredients`, `/ingredients/:id`, `/allergens`) is
-deprecated and is **switched off on 30 Nov 2026**. New products, starting with
-sauces, are only available on v2.
+deprecated and is **switched off on 30 Nov 2026**. Sauces are only available
+from v2 on. Tacos and sandwiches are only available on v3.
 
-## Pagination
+| Version | Status | Has |
+|---------|--------|-----|
+| v1 | Deprecated, off on 30 Nov 2026 | Burger ingredients |
+| v2 | Current | + sauces |
+| v3 | Current | + tacos and sandwiches: products, fillings, tortillas, breads |
+
+## Pagination (v2 and v3)
 
 List endpoints return up to `limit` items (default and maximum: 5) and a cursor:
 
@@ -17,7 +23,7 @@ List endpoints return up to `limit` items (default and maximum: 5) and a cursor:
 Pass `?cursor=<cursor.next>` to get the next page. `cursor.next` is `null` on
 the last page. Cursors are opaque: don't build them yourself.
 
-## Endpoints
+## v2 endpoints
 
 ### `GET /shop`
 
@@ -45,6 +51,42 @@ v1's `inStock` flag is gone in v2.
 
 One ingredient, not wrapped: `{ sku, displayName, ... }`.
 Unknown sku: `404 { "error": { "code": "sku_not_found", "message": "..." } }`.
+
+## v3 endpoints
+
+v3 has the same pagination and error format as v2. Everything on v2 is on v3,
+plus the items below.
+
+### `GET /v3/products`
+
+Paginated list of what the shop sells: `burger`, `taco`, `sandwich`.
+
+| Field         | Type   | Notes |
+|---------------|--------|-------|
+| `sku`         | string | `burger`, `taco` or `sandwich`. |
+| `displayName` | string | Name to show customers. |
+| `basePrice`   | object | `{ amount, currency, unit }`. What the product costs before ingredients. |
+
+The burger's `basePrice` is the same as `basePriceCents` on `/shop` and includes
+the bun. Tacos and sandwiches don't include their tortilla or bread: those are
+`bread` ingredients with their own price.
+
+### `GET /v3/categories`
+
+Paginated: `{ type, label }`. Adds `filling`.
+
+### `GET /v3/ingredients`
+
+Paginated. Every v2 field, plus:
+
+| Field         | Type     | Notes |
+|---------------|----------|-------|
+| `availableIn` | string[] | Product `sku`s this ingredient can go in. The kitchen can't make anything else. |
+| `vegetarian`  | boolean  | `false` if it contains meat or fish. |
+
+### `GET /v3/ingredients/:sku`
+
+One ingredient, not wrapped. Unknown sku: `404 sku_not_found`, as on v2.
 
 ## Errors
 

@@ -2,7 +2,8 @@
 //
 // v1 (/shop, /categories, /ingredients, /allergens): deprecated, switched off
 // at the end of November 2026. No sauces.
-// v2 (/v2/...): current. Different response shape, cursor pagination. Docs at /docs.
+// v2 (/v2/...): burgers and sauces. Different response shape, cursor pagination.
+// v3 (/v3/...): adds products (taco, sandwich), availableIn, vegetarian. Docs at /docs.
 import http from 'node:http';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -14,19 +15,33 @@ const V1_PAGE_SIZE = 5;
 const V2_LIMIT = 5;
 const SUNSET = 'Mon, 30 Nov 2026 23:59:59 GMT';
 
-const v1Ingredients = data.ingredients
-  .filter((i) => !i.v2Only)
-  .map(({ id, name, category, priceCents, stock, inStock }) => ({ id, name, category, priceCents, stock, inStock }));
-const v1Categories = data.categories.filter((c) => !c.v2Only).map(({ id, label }) => ({ id, label }));
+// `since` is the first API version an item appears in (default 1).
+const inVersion = (v) => (x) => (x.since ?? 1) <= v;
 
-const v2Ingredients = data.ingredients.map((i) => ({
-  sku: i.id,
-  displayName: i.name,
-  type: i.category,
-  price: { amount: i.priceCents, currency: data.shop.currency, unit: 'cents' },
-  portionsLeft: i.stock,
-}));
-const v2Categories = data.categories.map((c) => ({ type: c.id, label: c.label }));
+const v1Ingredients = data.ingredients
+  .filter(inVersion(1))
+  .map(({ id, name, category, priceCents, stock, inStock }) => ({ id, name, category, priceCents, stock, inStock }));
+const v1Categories = data.categories.filter(inVersion(1)).map(({ id, label }) => ({ id, label }));
+
+const money = (amount) => ({ amount, currency: data.shop.currency, unit: 'cents' });
+const v2Item = (i) => ({ sku: i.id, displayName: i.name, type: i.category, price: money(i.priceCents), portionsLeft: i.stock });
+const v2Ingredients = data.ingredients.filter(inVersion(2)).map(v2Item);
+const v2Categories = data.categories.filter(inVersion(2)).map((c) => ({ type: c.id, label: c.label }));
+
+const v3Ingredients = data.ingredients
+  .filter(inVersion(3))
+  .map((i) => ({ ...v2Item(i), availableIn: i.availableIn, vegetarian: i.vegetarian }));
+const v3Categories = data.categories.filter(inVersion(3)).map((c) => ({ type: c.id, label: c.label }));
+const v3Products = data.products.map((p) => ({ sku: p.id, displayName: p.name, basePrice: money(p.basePriceCents) }));
+
+const LISTS = {
+  '/v2/categories': v2Categories,
+  '/v2/ingredients': v2Ingredients,
+  '/v3/categories': v3Categories,
+  '/v3/ingredients': v3Ingredients,
+  '/v3/products': v3Products,
+};
+const ITEMS = { '/v2/ingredients/': v2Ingredients, '/v3/ingredients/': v3Ingredients };
 
 function paginateV1(items, pageParam) {
   const page = Math.max(1, Number.parseInt(pageParam ?? '1', 10) || 1);
@@ -94,13 +109,14 @@ export function createKitchenServer() {
     } else if (path === '/allergens') {
       status = 503;
       body = v1({ error: 'allergen_service_unavailable' });
-    } else if (path === '/v2/categories' || path === '/v2/ingredients') {
-      const page = paginateV2(path === '/v2/categories' ? v2Categories : v2Ingredients, url.searchParams);
+    } else if (LISTS[path]) {
+      const page = paginateV2(LISTS[path], url.searchParams);
       if (page) body = page;
       else [status, body] = [400, { error: { code: 'invalid_cursor', message: 'Cursor is not valid' } }];
-    } else if (path.startsWith('/v2/ingredients/')) {
-      const sku = decodeURIComponent(path.slice('/v2/ingredients/'.length));
-      const item = v2Ingredients.find((i) => i.sku === sku);
+    } else if (/^\/v[23]\/ingredients\//.test(path)) {
+      const prefix = path.slice(0, '/v2/ingredients/'.length);
+      const sku = decodeURIComponent(path.slice(prefix.length));
+      const item = ITEMS[prefix].find((i) => i.sku === sku);
       if (item) body = item;
       else [status, body] = [404, { error: { code: 'sku_not_found', message: `No ingredient with sku ${sku}` } }];
     } else {
