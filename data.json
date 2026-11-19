@@ -1,0 +1,32 @@
+{
+  "shop": { "name": "Stack'd", "tagline": "Build it your way", "currency": "EUR", "basePriceCents": 250 },
+  "categories": [
+    { "id": "patty", "label": "Patties" },
+    { "id": "cheese", "label": "Cheese" },
+    { "id": "veggie", "label": "Veggies" },
+    { "id": "extra", "label": "Extras" },
+    { "id": "bread", "label": "Bread" },
+    { "id": "sauce", "label": "Sauces", "v2Only": true }
+  ],
+  "ingredients": [
+    { "id": "beef-patty", "name": "Beef patty", "category": "patty", "priceCents": 350, "stock": 25, "inStock": true },
+    { "id": "veggie-patty", "name": "Chickpea patty", "category": "patty", "priceCents": 300, "stock": 12, "inStock": true },
+    { "id": "cheddar", "name": "Cheddar", "category": "cheese", "priceCents": 100, "stock": 30, "inStock": true },
+    { "id": "bacon", "name": "Bacon", "category": "extra", "priceCents": 150, "stock": 0, "inStock": true },
+    { "id": "lettuce", "name": "Lettuce", "category": "veggie", "priceCents": 50, "stock": 50, "inStock": true },
+    { "id": "tomato", "name": "Tomato", "category": "veggie", "priceCents": 60, "stock": 35, "inStock": true },
+    { "id": "pickles", "name": "Pickles", "category": "veggie", "priceCents": 40, "stock": 20, "inStock": true },
+    { "id": "caramelised-onion", "name": "Caramelised onion", "category": "veggie", "priceCents": 70, "stock": 18, "inStock": true },
+    { "id": "avocado", "name": "Avocado", "category": "extra", "priceCents": 180, "stock": 12, "inStock": false },
+    { "id": "fried-egg", "name": "Fried egg", "category": "extra", "priceCents": 130, "stock": 9, "inStock": true },
+    { "id": "jalapenos", "name": "Jalapeños", "category": "veggie", "priceCents": 50, "stock": 0, "inStock": false },
+    { "id": "halloumi", "name": "Grilled halloumi", "category": "cheese", "priceCents": 150, "stock": 8, "inStock": true },
+    { "id": "ketchup", "name": "Ketchup", "category": "sauce", "priceCents": 30, "stock": 60, "v2Only": true },
+    { "id": "mustard", "name": "Mustard", "category": "sauce", "priceCents": 30, "stock": 40, "v2Only": true },
+    { "id": "house-sauce", "name": "House sauce", "category": "sauce", "priceCents": 50, "stock": 22, "v2Only": true },
+    { "id": "bbq", "name": "Smoky BBQ", "category": "sauce", "priceCents": 60, "stock": 30, "v2Only": true },
+    { "id": "garlic-aioli", "name": "Garlic aioli", "category": "sauce", "priceCents": 70, "stock": 15, "v2Only": true },
+    { "id": "sriracha-mayo", "name": "Sriracha mayo", "category": "sauce", "priceCents": 80, "stock": 0, "v2Only": true },
+    { "id": "truffle-mayo", "name": "Truffle mayo", "category": "sauce", "priceCents": 150, "stock": 6, "v2Only": true }
+  ]
+}
