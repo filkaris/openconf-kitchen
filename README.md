@@ -5,8 +5,8 @@ Mock of the kitchen inventory API used by the
 workshop starter. Node 20.11+, no dependencies.
 
 ```sh
-npx github:filkaris/stackd-kitchen        # http://localhost:4100
-PORT=4101 npx github:filkaris/stackd-kitchen
+npx --allow-git=all github:filkaris/stackd-kitchen        # http://localhost:4100
+PORT=4101 npx --allow-git=all github:filkaris/stackd-kitchen
 ```
 
 API docs: http://localhost:4100/docs

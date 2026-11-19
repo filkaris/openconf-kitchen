@@ -6,7 +6,7 @@ const port = Number(process.env.PORT ?? process.argv[2] ?? 4100);
 createKitchenServer()
   .on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-      console.error(`Port ${port} is taken. Try: PORT=4101 npx github:filkaris/stackd-kitchen`);
+      console.error(`Port ${port} is taken. Try: PORT=4101 npx --allow-git=all github:filkaris/stackd-kitchen`);
       console.error('Then start the app with KITCHEN_API_URL=http://localhost:4101 npm start');
       process.exit(1);
     }
