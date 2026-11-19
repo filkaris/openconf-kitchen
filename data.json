@@ -1,5 +1,5 @@
 {
-  "shop": { "name": "Stack'd", "tagline": "Build it your way", "currency": "EUR", "basePriceCents": 250 },
+  "shop": { "name": "OpenConf Burgers", "tagline": "Build it your way", "currency": "EUR", "basePriceCents": 250 },
   "categories": [
     { "id": "patty", "label": "Patties" },
     { "id": "cheese", "label": "Cheese" },

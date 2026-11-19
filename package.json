@@ -1,12 +1,12 @@
 {
-  "name": "stackd-kitchen",
+  "name": "openconf-kitchen",
   "version": "1.0.0",
-  "description": "Kitchen inventory API mock for the Stack'd burger builder workshop",
+  "description": "Kitchen inventory API mock for the OpenConf Burgers builder workshop",
   "type": "module",
-  "bin": { "stackd-kitchen": "bin/stackd-kitchen.js" },
+  "bin": { "openconf-kitchen": "bin/openconf-kitchen.js" },
   "main": "server.js",
   "files": ["bin", "server.js", "data.json", "docs.md"],
   "engines": { "node": ">=20.11" },
-  "scripts": { "start": "node bin/stackd-kitchen.js" },
+  "scripts": { "start": "node bin/openconf-kitchen.js" },
   "license": "MIT"
 }

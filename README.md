@@ -1,12 +1,12 @@
-# stackd-kitchen
+# openconf-kitchen
 
 Mock of the kitchen inventory API used by the
-[Stack'd burger builder](https://github.com/filkaris/stackd-burger-builder)
+[OpenConf Burgers builder](https://github.com/filkaris/openconf-burger-builder)
 workshop starter. Node 20.11+, no dependencies.
 
 ```sh
-npx --allow-git=all github:filkaris/stackd-kitchen        # http://localhost:4100
-PORT=4101 npx --allow-git=all github:filkaris/stackd-kitchen
+npx --allow-git=all github:filkaris/openconf-kitchen        # http://localhost:4100
+PORT=4101 npx --allow-git=all github:filkaris/openconf-kitchen
 ```
 
 API docs: http://localhost:4100/docs

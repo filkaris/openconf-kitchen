@@ -1,4 +1,4 @@
-// Mock of the delivery platform's kitchen inventory API for Stack'd.
+// Mock of the delivery platform's kitchen inventory API for OpenConf Burgers.
 //
 // v1 (/shop, /categories, /ingredients, /allergens): deprecated, switched off
 // at the end of November 2026. No sauces.
